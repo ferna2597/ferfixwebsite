@@ -1,0 +1,70 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Product name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Product description"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "microcontrollers",
+        "amplifiers",
+        "voltage_regulators",
+        "logic_gates",
+        "timers",
+        "sensors",
+        "memory",
+        "converters"
+      ],
+      "description": "Product category"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price in USD"
+    },
+    "stock": {
+      "type": "number",
+      "description": "Available stock quantity"
+    },
+    "package_type": {
+      "type": "string",
+      "description": "IC package type (DIP, SMD, QFP, etc.)"
+    },
+    "manufacturer": {
+      "type": "string",
+      "description": "Manufacturer name"
+    },
+    "datasheet_url": {
+      "type": "string",
+      "description": "Link to datasheet"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Product image URL"
+    },
+    "part_number": {
+      "type": "string",
+      "description": "Manufacturer part number"
+    },
+    "pins": {
+      "type": "number",
+      "description": "Number of pins"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the product is featured"
+    }
+  },
+  "required": [
+    "name",
+    "price",
+    "category"
+  ]
+}
