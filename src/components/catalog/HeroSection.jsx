@@ -41,4 +41,15 @@ export default function HeroSection({ searchQuery, onSearchChange }) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-xl mx-auto relative"
         >
- 
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+          <Input
+            placeholder="Buscar por nombre, parte, fabricante..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="pl-12 pr-4 py-6 text-base bg-white/5 border-white/10 text-white placeholder:text-slate-500 rounded-xl focus:border-cyan-500/50 focus:ring-cyan-500/20 backdrop-blur-sm"
+          />
+        </motion.div>
+      </div>
+    </div>
+  );
+}
