@@ -1,150 +1,34 @@
-// Sample data for Integrated Circuits (ICs)
-
 const mockProducts = [
-  {
-    id: 1,
-    name: "LM358",
-    packageType: "DIP-8",
-    pins: 8,
-    voltage: "3-32V",
-    frequency: "1 MHz",
-    description: "Dual Operational Amplifier"
-  },
-  {
-    id: 2,
-    name: "555 Timer",
-    packageType: "DIP-8",
-    pins: 8,
-    voltage: "4.5-15V",
-    frequency: "100 kHz",
-    description: "Timer IC for timing and oscillation applications"
-  },
-  {
-    id: 3,
-    name: "LM317",
-    packageType: "TO-220",
-    pins: 3,
-    voltage: "1.25-37V",
-    frequency: "1 MHz",
-    description: "Adjustable voltage regulator"
-  },
-  {
-    id: 4,
-    name: "74HC595",
-    packageType: "DIP-16",
-    pins: 16,
-    voltage: "2-6V",
-    frequency: "100 MHz",
-    description: "Serial to parallel shift register"
-  },
-  {
-    id: 5,
-    name: "CD4017",
-    packageType: "DIP-16",
-    pins: 16,
-    voltage: "3-15V",
-    frequency: "5 MHz",
-    description: "Decade counter with 10 outputs"
-  },
-  {
-    id: 6,
-    name: "LM386",
-    packageType: "DIP-8",
-    pins: 8,
-    voltage: "4-12V",
-    frequency: "1 MHz",
-    description: "Audio amplifier"
-  },
-  {
-    id: 7,
-    name: "ADC0804",
-    packageType: "DIP-28",
-    pins: 28,
-    voltage: "5V",
-    frequency: "200 kHz",
-    description: "8-bit A/D converter"
-  },
-  {
-    id: 8,
-    name: "MAX232",
-    packageType: "DIP-16",
-    pins: 16,
-    voltage: "3-15V",
-    frequency: "250 kbps",
-    description: "RS-232 serial communication interface"
-  },
-  {
-    id: 9,
-    name: "555 CMOS",
-    packageType: "SOIC-8",
-    pins: 8,
-    voltage: "3-15V",
-    frequency: "100 kHz",
-    description: "Low-power timer IC"
-  },
-  {
-    id: 10,
-    name: "TDA2030",
-    packageType: "DIP-5",
-    pins: 5,
-    voltage: "4-14V",
-    frequency: "1 MHz",
-    description: "Audio power amplifier"
-  },
-  {
-    id: 11,
-    name: "74HC00",
-    packageType: "DIP-14",
-    pins: 14,
-    voltage: "3-15V",
-    frequency: "100 MHz",
-    description: "Quad 2-input NAND gate"
-  },
-  {
-    id: 12,
-    name: "LM358N",
-    packageType: "SOIC-8",
-    pins: 8,
-    voltage: "3-32V",
-    frequency: "1 MHz",
-    description: "High-performance dual op-amp"
-  },
-  {
-    id: 13,
-    name: "NE555",
-    packageType: "DIP-8",
-    pins: 8,
-    voltage: "4.5-15V",
-    frequency: "500 kHz",
-    description: "Precision timer IC"
-  },
-  {
-    id: 14,
-    name: "PCF8591",
-    packageType: "DIP-8",
-    pins: 8,
-    voltage: "3-5V",
-    frequency: "100 kHz",
-    description: "4-channel A/D and D/A converter"
-  },
-  {
-    id: 15,
-    name: "LM393",
-    packageType: "DIP-8",
-    pins: 8,
-    voltage: "2-36V",
-    frequency: "1 MHz",
-    description: "Dual comparator"
-  },
-  {
-    id: 16,
-    name: "L298N",
-    packageType: "DIP-15",
-    pins: 15,
-    voltage: "5-46V",
-    frequency: "100 kHz",
-    description: "Dual H-Bridge motor driver"
-  }
+    { id: 1, name: "LM358", category: "Op-Amp", packageType: "DIP", pins: 8, voltage: 32, frequency: 0.1, price: 0.50, description: "Dual operational amplifier", manufacturer: "Texas Instruments" },
+    { id: 2, name: "LM7805", category: "Voltage Regulator", packageType: "TO-220", pins: 3, voltage: 5, frequency: 1, price: 1.00, description: "5V voltage regulator", manufacturer: "ON Semiconductor" },
+    { id: 3, name: "NE555", category: "Timer", packageType: "DIP", pins: 8, voltage: 15, frequency: 2, price: 0.75, description: "Timer IC", manufacturer: "NEC" },
+    { id: 4, name: "HC-SR04", category: "Ultrasonic Sensor", packageType: "Module", pins: 4, voltage: 5, frequency: 40, price: 3.00, description: "Ultrasonic distance sensor", manufacturer: "Diatone" },
+    { id: 5, name: "74HC595", category: "Shift Register", packageType: "DIP", pins: 16, voltage: 6, frequency: 20, price: 0.60, description: "8-bit shift register", manufacturer: "NXP Semiconductors" },
+    { id: 6, name: "LM317", category: "Voltage Regulator", packageType: "TO-220", pins: 3, voltage: 40, frequency: 1, price: 1.20, description: "Adjustable voltage regulator", manufacturer: "Texas Instruments" },
+    { id: 7, name: "IRF520", category: "MOSFET", packageType: "TO-220", pins: 3, voltage: 100, frequency: 0.1, price: 0.80, description: "N-channel MOSFET", manufacturer: "Infineon" },
+    { id: 8, name: "LM339", category: "Comparator", packageType: "DIP", pins: 14, voltage: 36, frequency: 0.1, price: 0.55, description: "Quad comparator", manufacturer: "Texas Instruments" },
+    { id: 9, name: "MCP3008", category: "ADC", packageType: "DIP", pins: 16, voltage: 6, frequency: 0.1, price: 2.00, description: "8-channel ADC", manufacturer: "Microchip" },
+    { id: 10, name: "SN74LS00", category: "Logic Gate", packageType: "DIP", pins: 14, voltage: 5, frequency: 25, price: 0.45, description: "Quad 2-input NAND gate", manufacturer: "Texas Instruments" },
+    { id: 11, name: "ATmega328P", category: "Microcontroller", packageType: "DIP", pins: 28, voltage: 6, frequency: 20, price: 2.50, description: "8-bit microcontroller", manufacturer: "Microchip" },
+    { id: 12, name: "LM393", category: "Comparator", packageType: "DIP", pins: 8, voltage: 36, frequency: 0.1, price: 1.00, description: "Dual comparator", manufacturer: "Texas Instruments" },
+    { id: 13, name: "ADXL345", category: "Accelerometer", packageType: "Module", pins: 4, voltage: 3.6, frequency: 1, price: 4.50, description: "Triple-axis accelerometer", manufacturer: "Analog Devices" },
+    { id: 14, name: "L298N", category: "Motor Driver", packageType: "Module", pins: 15, voltage: 46, frequency: 0.1, price: 4.00, description: "Dual H-bridge motor driver", manufacturer: "STMicroelectronics" },
+    { id: 15, name: "MAX6675", category: "Temperature Sensor", packageType: "Module", pins: 3, voltage: 5, frequency: 1, price: 5.00, description: "Thermocouple temperature sensor", manufacturer: "Maxim Integrated" },
+    { id: 16, name: "PCF8591", category: "ADC/DAC", packageType: "DIP", pins: 8, voltage: 6, frequency: 0.1, price: 1.50, description: "ADC with DAC", manufacturer: "NXP Semiconductors" },
+    { id: 17, name: "LM393", category: "Comparator", packageType: "DIP", pins: 8, voltage: 36, frequency: 0.1, price: 0.50, description: "Dual voltage comparator", manufacturer: "Texas Instruments" },
+    { id: 18, name: "74HC74", category: "Flip-Flop", packageType: "DIP", pins: 14, voltage: 6, frequency: 25, price: 0.75, description: "Dual D-type flip-flop", manufacturer: "NXP Semiconductors" },
+    { id: 19, name: "ESP8266", category: "Wi-Fi Module", packageType: "Module", pins: 16, voltage: 3.3, frequency: 2.4, price: 3.50, description: "Wi-Fi microchip", manufacturer: "Espressif" },
+    { id: 20, name: "MT8870", category: "DTMF Decoder", packageType: "DIP", pins: 16, voltage: 15, frequency: 0.1, price: 2.00, description: "DTMF tone decoder", manufacturer: "Zilog" },
+    { id: 21, name: "DS18B20", category: "Temperature Sensor", packageType: "TO-92", pins: 3, voltage: 5, frequency: 0.1, price: 3.00, description: "Digital temperature sensor", manufacturer: "Maxim Integrated" },
+    { id: 22, name: "TP4056", category: "Battery Charger", packageType: "Module", pins: 5, voltage: 8, frequency: 0.1, price: 1.00, description: "Lithium battery charger", manufacturer: "Unknown" },
+    { id: 23, name: "LM358N", category: "Op-Amp", packageType: "DIP", pins: 8, voltage: 32, frequency: 0.1, price: 0.55, description: "Low-power dual op-amp", manufacturer: "Texas Instruments" },
+    { id: 24, name: "CS5460", category: "Power Monitor", packageType: "DIP", pins: 20, voltage: 5, frequency: 0.1, price: 4.50, description: "Power measurement IC", manufacturer: "Cirrus Logic" },
+    { id: 25, name: "PCA9685", category: "PWM Driver", packageType: "DIP", pins: 16, voltage: 6, frequency: 400, price: 2.50, description: "16-channel PWM driver", manufacturer: "NXP Semiconductors" },
+    { id: 26, name: "ADC0831", category: "ADC", packageType: "DIP", pins: 8, voltage: 15, frequency: 0.1, price: 1.20, description: "8-bit ADC", manufacturer: "National Semiconductor" },
+    { id: 27, name: "XR2211", category: "Phase-Locked Loop", packageType: "DIP", pins: 8, voltage: 15, frequency: 0.1, price: 3.50, description: "Phase-locked loop IC", manufacturer: "Exar Corporation" },
+    { id: 28, name: "MCP602", category: "Op-Amp", packageType: "DIP", pins: 8, voltage: 6, frequency: 0.1, price: 1.00, description: "Dual op-amp", manufacturer: "Microchip" },
+    { id: 29, name: "LM2904", category: "Op-Amp", packageType: "DIP", pins: 8, voltage: 32, frequency: 0.1, price: 0.75, description: "Dual low-power op-amp", manufacturer: "Texas Instruments" },
+    { id: 30, name: "LM324", category: "Op-Amp", packageType: "DIP", pins: 14, voltage: 32, frequency: 0.1, price: 1.50, description: "Quad op-amp", manufacturer: "Texas Instruments" },
 ];
 
 export default mockProducts;
