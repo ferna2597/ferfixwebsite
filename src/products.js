@@ -7,7 +7,7 @@ export const productsData = [
     name: "Microcontrolador ATmega328P",
     price: 5.50,
     category: "microcontrollers",
-    image_url: "/productos/smd_0201.jpeg",
+    image_url: "/productos/smd_0201.jpg",
     description: "Cerebro para Arduino Uno, 32KB Flash, 20MHz.",
     stock: 15,
     manufacturer: "Microchip",
@@ -15,4 +15,5 @@ export const productsData = [
   },
   // ... el resto de tus productos
 ];
+
 
