@@ -53,7 +53,7 @@ const AuthenticatedApp = () => {
           element={
             <LayoutWrapper currentPageName={path}>
               <PageComponent />
-            </Route>
+            </LayoutWrapper>
           }
         />
       ))}
