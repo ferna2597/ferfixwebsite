@@ -13,7 +13,7 @@ export default function Layout({ children }) {
               <Cpu className="w-4.5 h-4.5 text-white" />
             </div>
             <span className="text-white font-bold text-lg tracking-tight">
-              Fer<span className="text-cyan-400">Fix-Soluciones</span>
+              FerFix<span className="text-cyan-400"> Soluciones</span>
             </span>
           </Link>
         </div>
@@ -23,3 +23,4 @@ export default function Layout({ children }) {
   );
 
 }
+
