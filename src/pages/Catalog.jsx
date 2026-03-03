@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ShoppingCart, MessageCircle, X, Trash2, Plus, Minus } from "lucide-react"; // Sumamos Plus y Minus
+import React, { useState, useEffect } from "react"; // Añadimos useEffect
+import { ShoppingCart, MessageCircle, X, Trash2, Plus, Minus } from "lucide-react";
 import { productsData } from "@/products";
 
 import HeroSection from "@/components/catalog/HeroSection";
@@ -10,10 +10,29 @@ export default function Catalog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
   
-  const [cart, setCart] = useState([]);
+  // 1. CARGAR CARRITO: Al iniciar, busca si hay algo guardado en la memoria
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("ferfix_cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+  
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Añadir al carrito (o sumar si ya existe)
+  // 2. GUARDAR CARRITO: Cada vez que el carrito cambie, se guarda en el navegador
+  useEffect(() => {
+    localStorage.setItem("ferfix_cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // 3. SINCRONIZAR: Por si agregaste algo desde ProductDetail, esto actualiza el carrito al volver
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedCart = localStorage.getItem("ferfix_cart");
+      if (savedCart) setCart(JSON.parse(savedCart));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
@@ -26,7 +45,6 @@ export default function Catalog() {
     });
   };
 
-  // NUEVA: Función para modificar cantidad (+ o -)
   const updateQuantity = (id, amount) => {
     setCart((prevCart) =>
       prevCart.map((item) => {
@@ -44,7 +62,7 @@ export default function Catalog() {
   };
 
   const sendWhatsApp = () => {
-    const phone = "5491100000000"; // <--- NO OLVIDES PONER TU NÚMERO
+    const phone = "5491100000000"; // <--- TU NÚMERO
     if (cart.length === 0) return;
     const itemText = cart
       .map((item) => `* ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`)
@@ -85,7 +103,6 @@ export default function Catalog() {
         </div>
       </div>
 
-      {/* Botón Flotante */}
       <button 
         onClick={() => setIsCartOpen(true)}
         className="fixed bottom-8 right-8 z-50 bg-cyan-500 hover:bg-cyan-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all hover:scale-110 active:scale-95"
@@ -98,7 +115,6 @@ export default function Catalog() {
         )}
       </button>
 
-      {/* Sidebar del Carrito */}
       {isCartOpen && (
         <>
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55]" onClick={() => setIsCartOpen(false)} />
@@ -123,19 +139,9 @@ export default function Catalog() {
                     
                     <div className="flex justify-between items-center">
                       <div className="flex items-center bg-slate-900 rounded-lg p-1 border border-slate-700">
-                        <button 
-                          onClick={() => updateQuantity(item.id, -1)}
-                          className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md transition-colors"
-                        >
-                          <Minus size={14} />
-                        </button>
+                        <button onClick={() => updateQuantity(item.id, -1)} className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md"><Minus size={14} /></button>
                         <span className="px-3 text-white font-bold text-sm">{item.quantity}</span>
-                        <button 
-                          onClick={() => updateQuantity(item.id, 1)}
-                          className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md transition-colors"
-                        >
-                          <Plus size={14} />
-                        </button>
+                        <button onClick={() => updateQuantity(item.id, 1)} className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md"><Plus size={14} /></button>
                       </div>
                       <p className="text-white font-bold text-sm">${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
@@ -152,7 +158,7 @@ export default function Catalog() {
                 </div>
                 <button 
                   onClick={sendWhatsApp}
-                  className="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-900/40"
+                  className="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
                 >
                   <MessageCircle size={20} />
                   Enviar Pedido
