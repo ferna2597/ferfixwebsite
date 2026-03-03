@@ -30,7 +30,7 @@ export default function Catalog() {
   };
 
   const sendWhatsApp = () => {
-    const phone = "5491100000000"; // <--- CAMBIA ESTO POR TU NÚMERO
+    const phone = "541140623385"; // <--- CAMBIA ESTO POR TU NÚMERO
     if (cart.length === 0) return;
     const itemText = cart
       .map((item) => `* ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`)
@@ -138,3 +138,4 @@ export default function Catalog() {
     </div>
   );
             }
+
