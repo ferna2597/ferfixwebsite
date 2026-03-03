@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion"; // Importamos motion para el botón movible
 import { ShoppingCart, MessageCircle, X, Trash2, Plus, Minus, CheckCircle } from "lucide-react";
 import { productsData } from "@/products";
 
@@ -10,7 +11,7 @@ export default function Catalog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
   
-  // 1. ESTADO DEL CARRITO (Carga lo guardado en el navegador)
+  // 1. ESTADO DEL CARRITO: Carga lo guardado en el navegador
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("ferfix_cart");
     return savedCart ? JSON.parse(savedCart) : [];
@@ -33,7 +34,7 @@ export default function Catalog() {
     }
   }, []);
 
-  // 4. FUNCIÓN: Mostrar notificación temporal
+  // 4. FUNCIÓN: Mostrar notificación temporal (Toast)
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => setToastMessage(null), 3000);
@@ -70,7 +71,7 @@ export default function Catalog() {
   };
 
   const sendWhatsApp = () => {
-    const phone = "5491100000000"; // <--- CAMBIA ESTO POR TU NÚMERO REAL
+    const phone = "541140623385"; // <--- REEMPLAZA CON TU NÚMERO REAL
     if (cart.length === 0) return;
     const itemText = cart
       .map((item) => `* ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`)
@@ -93,7 +94,7 @@ export default function Catalog() {
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-slate-950 relative">
+    <div className="min-h-screen bg-slate-950 relative overflow-x-hidden">
       <HeroSection searchQuery={searchQuery} onSearchChange={setSearchQuery} />
       
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -112,10 +113,14 @@ export default function Catalog() {
         </div>
       </div>
 
-      {/* Botón Flotante de Carrito */}
-      <button 
+      {/* --- BOTÓN FLOTANTE ARRASTRABLE --- */}
+      <motion.button 
+        drag
+        dragConstraints={{ left: -300, right: 0, top: -600, bottom: 0 }}
+        whileDrag={{ scale: 1.1, cursor: "grabbing" }}
         onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-8 right-8 z-50 bg-cyan-500 hover:bg-cyan-400 text-slate-950 p-4 rounded-full shadow-2xl transition-all hover:scale-110 active:scale-95"
+        className="fixed bottom-8 right-8 z-50 bg-cyan-500 hover:bg-cyan-400 text-slate-950 p-4 rounded-full shadow-2xl transition-colors touch-none"
+        style={{ x: 0, y: 0 }}
       >
         <ShoppingCart size={28} />
         {cartCount > 0 && (
@@ -123,80 +128,101 @@ export default function Catalog() {
             {cartCount}
           </span>
         )}
-      </button>
+      </motion.button>
 
       {/* Notificación (Toast) */}
-      {toastMessage && (
-        <div className="fixed bottom-24 right-8 z-[100] bg-slate-900 text-cyan-100 border border-cyan-500/30 p-4 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <CheckCircle className="text-cyan-400 w-5 h-5" />
-          <p className="text-sm font-medium">{toastMessage}</p>
-        </div>
-      )}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-24 right-8 z-[100] bg-slate-900 text-cyan-100 border border-cyan-500/30 p-4 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-3"
+          >
+            <CheckCircle className="text-cyan-400 w-5 h-5" />
+            <p className="text-sm font-medium">{toastMessage}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Sidebar del Carrito */}
-      {isCartOpen && (
-        <>
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55]" onClick={() => setIsCartOpen(false)} />
-          <div className="fixed inset-y-0 right-0 w-85 max-w-[90%] bg-slate-900 shadow-2xl z-[60] p-6 border-l border-slate-800 flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-white font-bold text-xl text-cyan-400">Tu Pedido</h2>
-              <button onClick={() => setIsCartOpen(false)} className="p-1 hover:bg-slate-800 rounded-lg">
-                <X className="text-slate-400 hover:text-white" />
-              </button>
-            </div>
+      <AnimatePresence>
+        {isCartOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55]" 
+              onClick={() => setIsCartOpen(false)} 
+            />
+            <motion.div 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 right-0 w-85 max-w-[90%] bg-slate-900 shadow-2xl z-[60] p-6 border-l border-slate-800 flex flex-col"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-white font-bold text-xl text-cyan-400">Tu Pedido</h2>
+                <button onClick={() => setIsCartOpen(false)} className="p-1 hover:bg-slate-800 rounded-lg">
+                  <X className="text-slate-400 hover:text-white" />
+                </button>
+              </div>
 
-            <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
-              {cart.length === 0 ? (
-                <div className="text-center py-10">
-                  <ShoppingCart className="w-12 h-12 text-slate-700 mx-auto mb-4 opacity-20" />
-                  <p className="text-slate-500">Tu carrito está vacío</p>
-                </div>
-              ) : (
-                cart.map((item) => (
-                  <div key={item.id} className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/30">
-                    <div className="flex justify-between items-start mb-3">
-                      <p className="text-white font-medium text-sm leading-tight pr-4">{item.name}</p>
-                      <button onClick={() => removeFromCart(item.id)} className="text-slate-500 hover:text-red-400 transition-colors">
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center bg-slate-950 rounded-lg p-1 border border-slate-800">
-                        <button onClick={() => updateQuantity(item.id, -1)} className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md transition-colors">
-                          <Minus size={14} />
-                        </button>
-                        <span className="px-3 text-white font-bold text-sm min-w-[20px] text-center">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, 1)} className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md transition-colors">
-                          <Plus size={14} />
+              <div className="flex-1 overflow-y-auto space-y-4 pr-2 custom-scrollbar">
+                {cart.length === 0 ? (
+                  <div className="text-center py-10">
+                    <ShoppingCart className="w-12 h-12 text-slate-700 mx-auto mb-4 opacity-20" />
+                    <p className="text-slate-500">Tu carrito está vacío</p>
+                  </div>
+                ) : (
+                  cart.map((item) => (
+                    <div key={item.id} className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/30">
+                      <div className="flex justify-between items-start mb-3">
+                        <p className="text-white font-medium text-sm leading-tight pr-4">{item.name}</p>
+                        <button onClick={() => removeFromCart(item.id)} className="text-slate-500 hover:text-red-400 transition-colors">
+                          <Trash2 size={16} />
                         </button>
                       </div>
-                      <p className="text-cyan-400 font-bold text-sm">${(item.price * item.quantity).toFixed(2)}</p>
+                      
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center bg-slate-950 rounded-lg p-1 border border-slate-800">
+                          <button onClick={() => updateQuantity(item.id, -1)} className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md transition-colors">
+                            <Minus size={14} />
+                          </button>
+                          <span className="px-3 text-white font-bold text-sm min-w-[20px] text-center">{item.quantity}</span>
+                          <button onClick={() => updateQuantity(item.id, 1)} className="p-1 text-cyan-400 hover:bg-slate-800 rounded-md transition-colors">
+                            <Plus size={14} />
+                          </button>
+                        </div>
+                        <p className="text-cyan-400 font-bold text-sm">${(item.price * item.quantity).toFixed(2)}</p>
+                      </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-
-            {cart.length > 0 && (
-              <div className="mt-6 border-t border-slate-800 pt-4">
-                <div className="flex justify-between text-white font-bold mb-4 text-lg">
-                  <span>Total estimado:</span>
-                  <span className="text-cyan-400">${cart.reduce((acc, i) => acc + (i.price * i.quantity), 0).toFixed(2)}</span>
-                </div>
-                <button 
-                  onClick={sendWhatsApp}
-                  className="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-900/20 active:scale-[0.98]"
-                >
-                  <MessageCircle size={20} />
-                  Pedir por WhatsApp
-                </button>
-                <p className="text-[10px] text-slate-500 text-center mt-3">Confirmaremos stock y envío por chat</p>
+                  ))
+                )}
               </div>
-            )}
-          </div>
-        </>
-      )}
+
+              {cart.length > 0 && (
+                <div className="mt-6 border-t border-slate-800 pt-4">
+                  <div className="flex justify-between text-white font-bold mb-4 text-lg">
+                    <span>Total estimado:</span>
+                    <span className="text-cyan-400">${cart.reduce((acc, i) => acc + (i.price * i.quantity), 0).toFixed(2)}</span>
+                  </div>
+                  <button 
+                    onClick={sendWhatsApp}
+                    className="w-full bg-green-600 hover:bg-green-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-green-900/20 active:scale-[0.98]"
+                  >
+                    <MessageCircle size={20} />
+                    Pedir por WhatsApp
+                  </button>
+                  <p className="text-[10px] text-slate-500 text-center mt-3 uppercase tracking-wider">Confirmaremos stock por chat</p>
+                </div>
+              )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
