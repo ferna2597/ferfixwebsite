@@ -1,23 +1,22 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importamos useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 import { productsData } from "@/products"; 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 
 export default function ProductDetail() {
-  const navigate = useNavigate(); // Para volver al catálogo automáticamente
+  const navigate = useNavigate(); 
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get("id");
   
   const product = productsData.find(p => p.id === productId);
 
-  // --- NUEVA FUNCIÓN: AGREGAR AL CARRITO ---
   const handleAddToCart = () => {
-    // 1. Obtener lo que ya hay en el carrito (o un array vacío si no hay nada)
+    // 1. Obtenemos el carrito actual de la memoria
     const currentCart = JSON.parse(localStorage.getItem("ferfix_cart") || "[]");
     
-    // 2. Ver si el producto ya está
+    // 2. Lógica para sumar cantidad o agregar nuevo
     const existingIndex = currentCart.findIndex(item => item.id === product.id);
     
     if (existingIndex > -1) {
@@ -26,11 +25,13 @@ export default function ProductDetail() {
       currentCart.push({ ...product, quantity: 1 });
     }
     
-    // 3. Guardar en la memoria del navegador
+    // 3. Guardamos en localStorage
     localStorage.setItem("ferfix_cart", JSON.stringify(currentCart));
     
-    // 4. Feedback al usuario y volvemos al catálogo para que vea el carrito
-    alert(`¡${product.name} agregado!`);
+    // 4. EL TRUCO: Guardamos una "señal" para que el catálogo sepa que debe abrir el carrito
+    localStorage.setItem("open_cart_now", "true");
+    
+    // 5. Redirigimos al catálogo SIN el alert feo
     navigate("/catalog"); 
   };
 
@@ -62,10 +63,9 @@ export default function ProductDetail() {
           <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800">
             <div className="text-3xl font-bold mb-6 text-cyan-400">${product.price.toFixed(2)}</div>
             
-            {/* BOTÓN ACTUALIZADO */}
             <Button 
               onClick={handleAddToCart}
-              className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 py-6 text-lg font-bold shadow-lg shadow-cyan-500/20 transition-all"
+              className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 py-6 text-lg font-bold shadow-lg shadow-cyan-500/20 transition-all active:scale-95"
             >
               <ShoppingCart className="mr-2" /> Agregar al Carrito
             </Button>
