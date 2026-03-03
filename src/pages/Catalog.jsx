@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ShoppingCart, MessageCircle, X, Trash2 } from "lucide-react"; // Agregamos iconos
+import { ShoppingCart, MessageCircle, X, Trash2 } from "lucide-react";
 import { productsData } from "@/products";
 
 import HeroSection from "@/components/catalog/HeroSection";
@@ -10,11 +10,9 @@ export default function Catalog() {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("all");
   
-  // --- NUEVO: ESTADO DEL CARRITO ---
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Función para añadir al carrito
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
@@ -27,16 +25,14 @@ export default function Catalog() {
     });
   };
 
-  // Función para eliminar del carrito
   const removeFromCart = (id) => {
     setCart(cart.filter(item => item.id !== id));
   };
 
-  // --- FUNCIÓN DE WHATSAPP ---
   const sendWhatsApp = () => {
-    const phone = "5491100000000"; // CAMBIA ESTO POR TU NÚMERO (Código de país + área + número)
+    const phone = "5491100000000"; // <--- PONÉ TU NÚMERO AQUÍ
     
-    if (cart.length === 0) return alert("El carrito está vacío");
+    if (cart.length === 0) return;
 
     const itemText = cart
       .map((item) => `* ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`)
@@ -77,15 +73,15 @@ export default function Catalog() {
               key={product.id}
               product={product}
               index={idx}
-              onAddToCart={() => addToCart(product)} // Ahora añade de verdad
+              onAddToCart={() => addToCart(product)}
             />
           ))}
         </div>
       </div>
 
-      {/* --- BOTÓN FLOTANTE --- */}
+      {/* Botón Flotante */}
       <button 
-        onClick={() => setIsCartOpen(!isCartOpen)}
+        onClick={() => setIsCartOpen(true)}
         className="fixed bottom-8 right-8 z-50 bg-cyan-500 hover:bg-cyan-400 text-slate-950 p-4 rounded-full shadow-2xl shadow-cyan-500/20 transition-all hover:scale-110 active:scale-95"
       >
         <ShoppingCart size={28} />
@@ -96,43 +92,7 @@ export default function Catalog() {
         )}
       </button>
 
-      {/* --- MINI VENTANA DEL CARRITO (SIDEBAR SIMPLE) --- */}
+      {/* Sidebar del Carrito */}
       {isCartOpen && (
-        <div className="fixed inset-y-0 right-0 w-80 bg-slate-900 shadow-2xl z-[60] p-6 border-l border-slate-800 flex flex-col">
-          <div className=\"flex justify-between items-center mb-6\">
-            <h2 className="text-white font-bold text-xl">Tu Pedido</h2>
-            <button onClick={() => setIsCartOpen(false)}><X className="text-slate-400" /></button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto space-y-4">
-            {cart.length === 0 ? (
-              <p className="text-slate-500 text-center mt-10">El carrito está vacío</p>
-            ) : (
-              cart.map((item) => (
-                <div key={item.id} className="flex justify-between items-center bg-slate-800/50 p-3 rounded-lg">
-                  <div className="text-sm">
-                    <p className="text-white font-medium">{item.name}</p>
-                    <p className="text-cyan-400">{item.quantity} x ${item.price}</p>
-                  </div>
-                  <button onClick={() => removeFromCart(item.id)} className="text-red-400 hover:text-red-300">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
-
-          {cart.length > 0 && (
-            <button 
-              onClick={sendWhatsApp}
-              className="mt-6 w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors"
-            >
-              <MessageCircle size={20} />
-              Pedir por WhatsApp
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  );
-                }
+        <div className="fixed inset-y-0 right-0 w-80 bg-slate-900 shadow-2xl z-
+          
