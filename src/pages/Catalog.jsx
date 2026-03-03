@@ -30,20 +30,15 @@ export default function Catalog() {
   };
 
   const sendWhatsApp = () => {
-    const phone = "5491100000000"; // <--- PONÉ TU NÚMERO AQUÍ
-    
+    const phone = "5491100000000"; // <--- CAMBIA ESTO POR TU NÚMERO
     if (cart.length === 0) return;
-
     const itemText = cart
       .map((item) => `* ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`)
       .join("\n");
-    
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    
     const message = encodeURIComponent(
       `¡Hola FerFix! 👋 Me gustaría realizar el siguiente pedido:\n\n${itemText}\n\n*Total: $${total.toFixed(2)}*\n\n¿Tienen disponibilidad?`
     );
-    
     window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
   };
 
@@ -94,5 +89,52 @@ export default function Catalog() {
 
       {/* Sidebar del Carrito */}
       {isCartOpen && (
-        <div className="fixed inset-y-0 right-0 w-80 bg-slate-900 shadow-2xl z-
-          
+        <>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55]" onClick={() => setIsCartOpen(false)} />
+          <div className="fixed inset-y-0 right-0 w-80 bg-slate-900 shadow-2xl z-[60] p-6 border-l border-slate-800 flex flex-col transition-transform">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-white font-bold text-xl">Tu Pedido</h2>
+              <button onClick={() => setIsCartOpen(false)}>
+                <X className="text-slate-400 hover:text-white" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+              {cart.length === 0 ? (
+                <p className="text-slate-500 text-center mt-10">El carrito está vacío</p>
+              ) : (
+                cart.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                    <div className="text-sm">
+                      <p className="text-white font-medium">{item.name}</p>
+                      <p className="text-cyan-400">{item.quantity} x ${item.price.toFixed(2)}</p>
+                    </div>
+                    <button onClick={() => removeFromCart(item.id)} className="text-red-400 hover:text-red-300 ml-2">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {cart.length > 0 && (
+              <div className="mt-6 border-t border-slate-800 pt-4">
+                <div className="flex justify-between text-white font-bold mb-4 text-lg">
+                  <span>Total:</span>
+                  <span>${cart.reduce((acc, i) => acc + (i.price * i.quantity), 0).toFixed(2)}</span>
+                </div>
+                <button 
+                  onClick={sendWhatsApp}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-900/20"
+                >
+                  <MessageCircle size={20} />
+                  Pedir por WhatsApp
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+            }
